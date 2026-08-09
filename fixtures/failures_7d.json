@@ -1,0 +1,166 @@
+{
+ "2026-08-03": [
+  {
+   "lesson": "a fleet that refuses to run stale code looks worse on a chart and is far safer in production",
+   "status": "by-design refusal; operator fix landed 2026-08-08",
+   "system": "equity research desk",
+   "what": "all 29 scheduled jobs failed fast. Cause: the pre-run gate refuses to execute stale code, and the repo's branches had diverged after a laptop-side change - so it stopped everything rather than run old logic."
+  },
+  {
+   "lesson": "scrapers must fail loud on 404s, not fabricate a quiet zero",
+   "status": "timeout tuned; page move tracked",
+   "system": "hardware-market scanner",
+   "what": "2 of 27 runs failed: one scrape hit its hard timeout, one target page moved (404)."
+  },
+  {
+   "lesson": "the probe's job is to be annoying; a green probe over broken agents would be the real failure",
+   "status": "open - probe stays red until each agent is fixed",
+   "system": "scheduler health probe",
+   "what": "daily probe exited RED: 4 agents flagged critical, including a weekly scraper broken by an upstream page move."
+  },
+  {
+   "lesson": "published because it is true; this is the current worst offender on the board",
+   "status": "OPEN - unresolved all week",
+   "system": "desk dashboard refresher",
+   "what": "all 8 runs failed."
+  }
+ ],
+ "2026-08-04": [
+  {
+   "lesson": "fail-loud debt is visible debt",
+   "status": "by-design refusal, day 2 of 5",
+   "system": "equity research desk",
+   "what": "29/29 failed fast again - same stale-code refusal, still awaiting operator reconcile."
+  },
+  {
+   "lesson": "timeouts are a budget, not a bug",
+   "status": "recovered next cycle",
+   "system": "research-source trackers",
+   "what": "one tracker run hit its hard timeout (exit 124) mid-fetch."
+  },
+  {
+   "lesson": "",
+   "status": "open",
+   "system": "scheduler health probe",
+   "what": "RED: 5 agents critical."
+  },
+  {
+   "lesson": "",
+   "status": "OPEN",
+   "system": "desk dashboard refresher",
+   "what": "1/1 failed."
+  }
+ ],
+ "2026-08-05": [
+  {
+   "lesson": "",
+   "status": "by-design refusal",
+   "system": "equity research desk",
+   "what": "29/29 failed fast - stale-code refusal, day 3."
+  },
+  {
+   "lesson": "",
+   "status": "open",
+   "system": "scheduler health probe",
+   "what": "RED: 6 agents critical."
+  },
+  {
+   "lesson": "",
+   "status": "OPEN",
+   "system": "desk dashboard refresher",
+   "what": "3/3 failed."
+  }
+ ],
+ "2026-08-06": [
+  {
+   "lesson": "",
+   "status": "by-design refusal",
+   "system": "equity research desk",
+   "what": "29 of 30 failed fast - stale-code refusal, day 4."
+  },
+  {
+   "lesson": "",
+   "status": "open",
+   "system": "scheduler health probe",
+   "what": "RED: 5 agents critical."
+  },
+  {
+   "lesson": "",
+   "status": "OPEN",
+   "system": "desk dashboard refresher",
+   "what": "2/2 failed."
+  }
+ ],
+ "2026-08-07": [
+  {
+   "lesson": "",
+   "status": "by-design refusal",
+   "system": "equity research desk",
+   "what": "29 of 30 failed fast - stale-code refusal, day 5."
+  },
+  {
+   "lesson": "",
+   "status": "recovered next day",
+   "system": "crypto rotation monitor",
+   "what": "surface refresh failed once (fast exit)."
+  },
+  {
+   "lesson": "",
+   "status": "open",
+   "system": "scheduler health probe",
+   "what": "RED: 5 agents critical."
+  },
+  {
+   "lesson": "",
+   "status": "OPEN",
+   "system": "desk dashboard refresher",
+   "what": "10/10 failed."
+  }
+ ],
+ "2026-08-08": [
+  {
+   "lesson": "the fix was one git reconcile - the gate spent five days correctly refusing to guess",
+   "status": "recovering",
+   "system": "equity research desk",
+   "what": "operator reconciled the diverged branches; failures dropped 29 -> 15 as jobs came back through the day."
+  },
+  {
+   "lesson": "",
+   "status": "page move tracked",
+   "system": "hardware-market scanner",
+   "what": "1 of 25 failed: marketplace page returned 404 mid-capture; run aborted loudly."
+  },
+  {
+   "lesson": "",
+   "status": "open",
+   "system": "scheduler health probe",
+   "what": "RED: 5 agents critical."
+  },
+  {
+   "lesson": "",
+   "status": "OPEN",
+   "system": "desk dashboard refresher",
+   "what": "12/12 failed."
+  }
+ ],
+ "2026-08-09": [
+  {
+   "lesson": "receipts: the same board that showed 29 red now shows 0",
+   "status": "resolved",
+   "system": "equity research desk",
+   "what": "16/16 clean - first zero-failure day after the 5-day refusal streak."
+  },
+  {
+   "lesson": "",
+   "status": "open",
+   "system": "scheduler health probe",
+   "what": "RED: 4 agents critical - count falling, still not green."
+  },
+  {
+   "lesson": "",
+   "status": "OPEN - top of next week's fix list",
+   "system": "desk dashboard refresher",
+   "what": "7/7 failed."
+  }
+ ]
+}

@@ -1,0 +1,107 @@
+{
+ "2026-08-03": {
+  "attention_gate_emits": 0,
+  "capture_ingest_runs": 48,
+  "compute_minutes": 112,
+  "delegated_runs": {
+   "grok": {
+    "qa_pass": 0,
+    "runs": 18
+   }
+  },
+  "failed_fires": 40,
+  "job_fires": 131,
+  "partial_day": false
+ },
+ "2026-08-04": {
+  "attention_gate_emits": 2,
+  "capture_ingest_runs": 47,
+  "compute_minutes": 81,
+  "delegated_runs": {
+   "codex": {
+    "qa_pass": 0,
+    "runs": 1
+   },
+   "grok": {
+    "qa_pass": 0,
+    "runs": 4
+   }
+  },
+  "failed_fires": 32,
+  "job_fires": 120,
+  "partial_day": false
+ },
+ "2026-08-05": {
+  "attention_gate_emits": 3,
+  "capture_ingest_runs": 48,
+  "compute_minutes": 66,
+  "delegated_runs": {
+   "grok": {
+    "qa_pass": 0,
+    "runs": 2
+   }
+  },
+  "failed_fires": 33,
+  "job_fires": 122,
+  "partial_day": false
+ },
+ "2026-08-06": {
+  "attention_gate_emits": 0,
+  "capture_ingest_runs": 48,
+  "compute_minutes": 93,
+  "delegated_runs": {},
+  "failed_fires": 32,
+  "job_fires": 124,
+  "partial_day": false
+ },
+ "2026-08-07": {
+  "attention_gate_emits": 0,
+  "capture_ingest_runs": 47,
+  "compute_minutes": 290,
+  "delegated_runs": {
+   "grok": {
+    "qa_pass": 0,
+    "runs": 1
+   }
+  },
+  "failed_fires": 41,
+  "job_fires": 134,
+  "partial_day": false
+ },
+ "2026-08-08": {
+  "attention_gate_emits": 0,
+  "capture_ingest_runs": 48,
+  "compute_minutes": 188,
+  "delegated_runs": {
+   "codex": {
+    "qa_pass": 0,
+    "runs": 9
+   },
+   "grok": {
+    "qa_pass": 0,
+    "runs": 26
+   }
+  },
+  "failed_fires": 29,
+  "job_fires": 133,
+  "partial_day": false
+ },
+ "2026-08-09": {
+  "attention_gate_emits": 0,
+  "capture_ingest_runs": 28,
+  "compute_minutes": 184,
+  "delegated_runs": {
+   "codex": {
+    "qa_pass": 0,
+    "runs": 5
+   },
+   "grok": {
+    "qa_pass": 0,
+    "runs": 10
+   }
+  },
+  "failed_fires": 8,
+  "job_fires": 82,
+  "partial_day": true
+ }
+}

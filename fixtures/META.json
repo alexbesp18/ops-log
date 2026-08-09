@@ -1,0 +1,14 @@
+{
+ "cost_note": "The fleet runs on fixed-price subscriptions for agent labor plus two always-on Macs; per-run marginal cost is ~zero. Exact per-day dollar metering is not yet wired to this log - it lands with the automation decision. Until then this log reports compute-minutes and delegated-run counts, which are measured, never estimated.",
+ "live_day_1": "2026-08-09",
+ "notes": {
+  "investing alert loop": "no runs recorded 2026-08-08 onward - the gap is shown as a gap, not painted over"
+ },
+ "reconstructed": true,
+ "reconstructed_note": "This 7-day sample is reconstructed from the fleet's own ledgers (heartbeat rows, delegation ledger, attention-gate ledger). It was assembled on 2026-08-09 - the log's first live day. Backfill is labeled as backfill.",
+ "redaction_policy": "allowlist: only systems named in this file's companion fixtures can appear; everything else does not exist here. No dollar amounts, no holdings, no employer or client names, no personal names, no machine names.",
+ "window": {
+  "end": "2026-08-09",
+  "start": "2026-08-03"
+ }
+}
