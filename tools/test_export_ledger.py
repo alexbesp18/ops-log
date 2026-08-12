@@ -100,14 +100,14 @@ class GateTests(unittest.TestCase):
     def test_summary_reports_the_qa_gap_rather_than_hiding_it(self) -> None:
         rows = [
             {
-                "ts": "2026-08-01T00:00:00Z",
+                "month": "2026-08",
                 "engine": "grok",
                 "outcome": "ok",
                 "qa": "unreviewed",
                 "task": "a",
             },
             {
-                "ts": "2026-08-02T00:00:00Z",
+                "month": "2026-09",
                 "engine": "codex",
                 "outcome": "fail",
                 "qa": "behavior-reviewed",
@@ -119,7 +119,7 @@ class GateTests(unittest.TestCase):
         self.assertEqual(s["qa"]["unannotated"], 1)
         self.assertEqual(s["qa"]["coverage_pct"], 50.0)
         self.assertEqual(s["failure_rate_pct"], 50.0)
-        self.assertEqual(s["window"]["days_covered"], 2)
+        self.assertEqual(s["window"]["months_covered"], 2)
 
     def test_redaction_count_appears_in_the_summary(self) -> None:
         rows = E.read_ledger(self.ledger)
@@ -146,6 +146,33 @@ class GateTests(unittest.TestCase):
         self.assertNotIn(
             "acmecorp", (out / "delegation_ledger.jsonl").read_text().lower()
         )
+
+
+class TimestampWithholdingTests(unittest.TestCase):
+    """The public file must never carry a per-run timestamp."""
+
+    def setUp(self) -> None:
+        self.dir = Path(tempfile.mkdtemp())
+        self.deny = write(self.dir / "d.txt", "acmecorp\n")
+
+    def test_row_timestamps_are_replaced_by_month(self) -> None:
+        led = write(self.dir / "l.jsonl", ROW % "routine sweep")
+        clean, _ = E.sanitize(E.read_ledger(led), E.load_denylist(self.deny))
+        self.assertNotIn("ts", clean[0])
+        self.assertEqual(clean[0]["month"], "2026-08")
+
+    def test_a_leaked_timestamp_aborts_the_write(self) -> None:
+        with self.assertRaises(E.GateBroken):
+            E.verify_no_timestamps([{"month": "2026-08", "task": "ran at 2026-08-01T10:00:00Z"}])
+        with self.assertRaises(E.GateBroken):
+            E.verify_no_timestamps([{"month": "2026-08", "ts": "2026-08-01T10:00:00Z"}])
+
+    def test_clock_times_are_caught_too(self) -> None:
+        with self.assertRaises(E.GateBroken):
+            E.verify_no_timestamps([{"month": "2026-08", "task": "kicked off 15:26"}])
+
+    def test_month_itself_is_allowed(self) -> None:
+        E.verify_no_timestamps([{"month": "2026-08", "engine": "codex", "task": "sweep"}])
 
 
 if __name__ == "__main__":

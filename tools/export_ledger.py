@@ -26,6 +26,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 REDACTED = "[redacted: allowlist policy]"
+WITHHELD_FIELDS = ("ts",)  # never published
 REQUIRED_KEYS = ("engine", "outcome", "qa", "task", "ts")
 
 
@@ -90,12 +91,19 @@ def sanitize(rows: list[dict[str, Any]], terms: list[str]) -> tuple[list[dict], 
     redacted = 0
     for row in rows:
         task = str(row.get("task", ""))
+        # Some task labels carry the date they were coined ("northstar-grade-2026-07-20").
+        # The label is worth publishing; the date is not, so strip it from the name.
+        task = re.sub(r"[-_ ]?\d{4}-\d{2}-\d{2}", "", task).strip("-_ ")
         if find_banned(task, terms):
             task = REDACTED
             redacted += 1
+        # Per-run timestamps are deliberately NOT published. A day-and-hour record of
+        # when work happens says more about the author's calendar than about the work,
+        # and that is not what this ledger is for. Month is kept so the window stays
+        # checkable; nothing finer leaves the private file.
         clean.append(
             {
-                "ts": row["ts"],
+                "month": str(row["ts"])[:7],
                 "engine": row["engine"],
                 "outcome": row["outcome"],
                 "qa": row["qa"],
@@ -106,19 +114,19 @@ def sanitize(rows: list[dict[str, Any]], terms: list[str]) -> tuple[list[dict], 
 
 
 def summarize(rows: list[dict[str, Any]], redacted: int) -> dict[str, Any]:
-    days = collections.Counter(str(r["ts"])[:10] for r in rows)
+    months = collections.Counter(str(r["month"]) for r in rows)
     outcomes = collections.Counter(str(r["outcome"]) for r in rows)
     engines = collections.Counter(str(r["engine"]) for r in rows)
     reviewed = sum(
         1 for r in rows if str(r.get("qa", "")).strip() not in ("", "unreviewed")
     )
-    stamps = sorted(str(r["ts"]) for r in rows)
+    stamps = sorted(str(r["month"]) for r in rows)
     return {
         "rows": len(rows),
         "window": {
-            "first_run": stamps[0],
-            "last_run": stamps[-1],
-            "days_covered": len(days),
+            "first_month": stamps[0],
+            "last_month": stamps[-1],
+            "months_covered": len(months),
         },
         "engines": dict(engines.most_common()),
         "outcomes": dict(outcomes.most_common()),
@@ -134,8 +142,22 @@ def summarize(rows: list[dict[str, Any]], redacted: int) -> dict[str, Any]:
             ),
         },
         "redacted_tasks": redacted,
-        "runs_per_day": dict(sorted(days.items())),
+        "runs_per_month": dict(sorted(months.items())),
     }
+
+
+def verify_no_timestamps(rows: list[dict[str, Any]]) -> None:
+    """No per-run timestamp may reach the public file, in any field or any format."""
+    stamp = re.compile(r"\d{4}-\d{2}-\d{2}|\d{2}:\d{2}")
+    for index, row in enumerate(rows):
+        for field in WITHHELD_FIELDS:
+            if field in row:
+                raise GateBroken(f"row {index} still carries the withheld field {field!r}")
+        for key, value in row.items():
+            if key == "month":
+                continue
+            if stamp.search(str(value)):
+                raise GateBroken(f"row {index} field {key!r} looks like a timestamp - aborting write")
 
 
 def verify_clean(rows: list[dict[str, Any]], terms: list[str]) -> None:
@@ -163,6 +185,7 @@ def main(argv: list[str] | None = None) -> int:
         rows = read_ledger(args.ledger.expanduser())
         clean, redacted = sanitize(rows, terms)
         verify_clean(clean, terms)
+        verify_no_timestamps(clean)
     except GateBroken as exc:
         print(f"EXPORT REFUSED: {exc}", file=sys.stderr)
         return 2
@@ -179,7 +202,7 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     print(
-        f"exported {summary['rows']} rows spanning {summary['window']['days_covered']} days"
+        f"exported {summary['rows']} rows spanning {summary['window']['months_covered']} month(s); timestamps withheld"
     )
     print(f"redacted {redacted} task string(s) under the allowlist policy")
     print(

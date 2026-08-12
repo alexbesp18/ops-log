@@ -21,32 +21,30 @@ The public record is allowlisted: only systems named in the companion fixtures c
 ## The delegation ledger
 
 The delegation wrappers write a row for each task they run: which engine took it, what happened,
-and when. Nothing edits it by hand and it is still being written to today. It records what went
-through the wrappers, which is not the same as proving every delegated task everywhere was captured.
+and roughly when. Nothing edits it by hand and it is still being written to today. It records what
+went through the wrappers, which is not the same as proving every delegated task everywhere was
+captured.
 
 | | |
 |---|---|
-| **Runs** | **710** |
-| **Window** | 2026-07-18 → 2026-08-12 (25 days) |
-| **Engines** | codex 255 · grok 451 · kimi 2 · sol+kimi 1 · workflow-fable 1 |
+| **Runs** | **717** |
+| **Window** | 2026-07 → 2026-08 |
+| **By month** | 2026-07 — 454 runs · 2026-08 — 263 runs |
+| **Engines** | codex 258 · grok 455 · kimi 2 · sol+kimi 1 · workflow-fable 1 |
 | **Families behind those labels** | OpenAI/Codex (codex, sol) · xAI/Grok (grok) · Moonshot/Kimi (kimi) · Anthropic/Claude (workflow-fable) |
-| **Outcomes** | fail 38 · hung-retaken 1 · noop 1 · ok 670 |
-| **Failure rate** | **5.35%** |
+| **Outcomes** | fail 38 · hung-retaken 1 · noop 1 · ok 677 |
+| **Failure rate** | **5.3%** |
 
-Recent daily volume:
+### What this file deliberately does not contain
 
-| day | runs |
-|---|---|
-| 2026-08-02 | ███████ 12 |
-| 2026-08-03 | ███████████████ 28 |
-| 2026-08-04 | ██ 2 |
-| 2026-08-05 | ███ 5 |
-| 2026-08-07 | █ 1 |
-| 2026-08-08 | ████ 6 |
-| 2026-08-09 | ███████████████████████████████████ 69 |
-| 2026-08-10 | █████████████████████████████████ 64 |
-| 2026-08-11 | █████████████████ 32 |
-| 2026-08-12 | ███████████████████ 36 |
+Per-run timestamps are withheld. Rows carry a month, never a date or a clock time.
+
+A run-level time series says more about when one person happens to work than about the work
+itself, and that is not what this record is for. The exporter enforces it rather than trusting
+anyone to remember: any date or clock time surviving into the output aborts the write, and four
+tests pin that behaviour. Dates that appeared inside task labels are stripped from the label too.
+
+The month is kept so the window stays checkable and so the record visibly accrues from here.
 
 ### Review annotations, stated plainly
 
