@@ -20,14 +20,16 @@ The public record is allowlisted: only systems named in the companion fixtures c
 
 ## The delegation ledger
 
-Every task handed to an agent gets a row: which model family took it, what happened, and when.
-The wrappers write it, nothing edits it by hand, and it is still being written to today.
+The delegation wrappers write a row for each task they run: which engine took it, what happened,
+and when. Nothing edits it by hand and it is still being written to today. It records what went
+through the wrappers, which is not the same as proving every delegated task everywhere was captured.
 
 | | |
 |---|---|
 | **Runs** | **710** |
 | **Window** | 2026-07-18 → 2026-08-12 (25 days) |
-| **Families** | codex 255 · grok 451 · kimi 2 · sol+kimi 1 · workflow-fable 1 |
+| **Engines** | codex 255 · grok 451 · kimi 2 · sol+kimi 1 · workflow-fable 1 |
+| **Families behind those labels** | OpenAI/Codex (codex, sol) · xAI/Grok (grok) · Moonshot/Kimi (kimi) · Anthropic/Claude (workflow-fable) |
 | **Outcomes** | fail 38 · hung-retaken 1 · noop 1 · ok 670 |
 | **Failure rate** | **5.35%** |
 
@@ -46,16 +48,17 @@ Recent daily volume:
 | 2026-08-11 | █████████████████ 32 |
 | 2026-08-12 | ███████████████████ 36 |
 
-### The QA gap, stated plainly
+### Review annotations, stated plainly
 
-**24 of 710 rows carry a per-run QA annotation — 3.4% coverage.**
+**24 of 710 rows carry a per-run review annotation — 3.4% annotation coverage.**
 
-Most rows carry no per-run QA annotation. High-stakes work is reviewed by a different model family through held branches, which this field did not record until annotation began. The gap is published rather than backfilled.
+Read that as what it is. It measures how often this field was filled in, not how often a review
+happened. A blank field cannot prove a review took place and cannot prove one did not. High-stakes
+work goes to a different model family on held branches, but until annotation began this ledger did
+not record it, so **historical review coverage is not provable from this file.**
 
-This number is published because it is the number. High-stakes work does get reviewed by a
-different model family, but this field did not record that, so the record cannot prove it.
-Annotation starts now and the coverage line above moves on its own from here. Watch it rather
-than take the claim.
+The number is published rather than backfilled. Per-run annotation starts now, so the figure above
+moves on its own from here. Watch it move rather than take the claim.
 
 ### What is redacted, and what that costs
 
