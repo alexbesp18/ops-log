@@ -1,0 +1,56 @@
+{
+ "engines": {
+  "codex": 255,
+  "grok": 451,
+  "kimi": 2,
+  "sol+kimi": 1,
+  "workflow-fable": 1
+ },
+ "failure_rate_pct": 5.35,
+ "outcomes": {
+  "fail": 38,
+  "hung-retaken": 1,
+  "noop": 1,
+  "ok": 670
+ },
+ "qa": {
+  "annotated": 24,
+  "coverage_pct": 3.4,
+  "note": "Most rows carry no per-run QA annotation. High-stakes work is reviewed by a different model family through held branches, which this field did not record until annotation began. The gap is published rather than backfilled.",
+  "unannotated": 686
+ },
+ "redacted_tasks": 1,
+ "rows": 710,
+ "runs_per_day": {
+  "2026-07-18": 5,
+  "2026-07-19": 34,
+  "2026-07-20": 175,
+  "2026-07-21": 11,
+  "2026-07-22": 6,
+  "2026-07-23": 2,
+  "2026-07-24": 11,
+  "2026-07-25": 19,
+  "2026-07-26": 66,
+  "2026-07-27": 26,
+  "2026-07-28": 15,
+  "2026-07-29": 24,
+  "2026-07-30": 59,
+  "2026-07-31": 1,
+  "2026-08-01": 1,
+  "2026-08-02": 12,
+  "2026-08-03": 28,
+  "2026-08-04": 2,
+  "2026-08-05": 5,
+  "2026-08-07": 1,
+  "2026-08-08": 6,
+  "2026-08-09": 69,
+  "2026-08-10": 64,
+  "2026-08-11": 32,
+  "2026-08-12": 36
+ },
+ "window": {
+  "days_covered": 25,
+  "first_run": "2026-07-18T22:20:05Z",
+  "last_run": "2026-08-12T15:26:07Z"
+ }
+}

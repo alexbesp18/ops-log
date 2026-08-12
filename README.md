@@ -18,6 +18,63 @@ The fleet runs on fixed-price subscriptions for agent labor plus two always-on M
 
 The public record is allowlisted: only systems named in the companion fixtures can appear. No dollar amounts, holdings, employer or client names, personal names, or machine names appear. [Redaction policy](fixtures/META.json)
 
+## The delegation ledger
+
+Every task handed to an agent gets a row: which model family took it, what happened, and when.
+The wrappers write it, nothing edits it by hand, and it is still being written to today.
+
+| | |
+|---|---|
+| **Runs** | **710** |
+| **Window** | 2026-07-18 → 2026-08-12 (25 days) |
+| **Families** | codex 255 · grok 451 · kimi 2 · sol+kimi 1 · workflow-fable 1 |
+| **Outcomes** | fail 38 · hung-retaken 1 · noop 1 · ok 670 |
+| **Failure rate** | **5.35%** |
+
+Recent daily volume:
+
+| day | runs |
+|---|---|
+| 2026-08-02 | ███████ 12 |
+| 2026-08-03 | ███████████████ 28 |
+| 2026-08-04 | ██ 2 |
+| 2026-08-05 | ███ 5 |
+| 2026-08-07 | █ 1 |
+| 2026-08-08 | ████ 6 |
+| 2026-08-09 | ███████████████████████████████████ 69 |
+| 2026-08-10 | █████████████████████████████████ 64 |
+| 2026-08-11 | █████████████████ 32 |
+| 2026-08-12 | ███████████████████ 36 |
+
+### The QA gap, stated plainly
+
+**24 of 710 rows carry a per-run QA annotation — 3.4% coverage.**
+
+Most rows carry no per-run QA annotation. High-stakes work is reviewed by a different model family through held branches, which this field did not record until annotation began. The gap is published rather than backfilled.
+
+This number is published because it is the number. High-stakes work does get reviewed by a
+different model family, but this field did not record that, so the record cannot prove it.
+Annotation starts now and the coverage line above moves on its own from here. Watch it rather
+than take the claim.
+
+### What is redacted, and what that costs
+
+1 task string was replaced with a redaction marker under the allowlist policy.
+The row itself stays — the count, the engine, the outcome, and the timestamp are all still there.
+Nothing is deleted to make the record look better.
+
+### Reproduce it
+
+The exporter is the only path from the private ledger to this file, and it fails closed. A missing
+or empty denylist aborts the run. A banned term that survives sanitization aborts the write.
+
+```bash
+python3 tools/export_ledger.py --ledger <private-ledger> --denylist <denylist>
+python3 -m unittest discover -s tools -p 'test_*.py'
+```
+
+[Ledger rows](fixtures/delegation_ledger.jsonl) · [Computed summary](fixtures/delegation_summary.json)
+
 ## How to read this
 
 Each daily page has one line for what happened, one failure story, an attention-cost note, evidence links, and a small heartbeat table. A missing heartbeat is written as absent, not zero.
