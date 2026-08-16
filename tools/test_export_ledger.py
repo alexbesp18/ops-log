@@ -174,6 +174,25 @@ class TimestampWithholdingTests(unittest.TestCase):
     def test_month_itself_is_allowed(self) -> None:
         E.verify_no_timestamps([{"month": "2026-08", "engine": "codex", "task": "sweep"}])
 
+    # --- home-directory fragments never reach the public file ---
+
+    def test_home_dir_fragments_are_scrubbed_from_task_and_qa(self) -> None:
+        rows = [
+            {"ts": "2026-08-01T10:00:00Z", "engine": "grok", "outcome": "fail",
+             "qa": "read /Users/somebody/notes", "task": "22650w:--cwd-Userssomebody"},
+        ]
+        clean, _ = E.sanitize(rows, ["acmecorp"])
+        self.assertNotIn("somebody", clean[0]["task"])
+        self.assertNotIn("somebody", clean[0]["qa"])
+        self.assertIn("~", clean[0]["task"])
+
+    def test_a_surviving_home_dir_fragment_aborts_the_write(self) -> None:
+        with self.assertRaises(E.GateBroken):
+            E.verify_no_home_paths([{"month": "2026-08", "engine": "grok", "outcome": "ok",
+                                     "qa": "unreviewed", "task": "cwd-Userssomebody"}])
+        E.verify_no_home_paths([{"month": "2026-08", "engine": "grok", "outcome": "ok",
+                                 "qa": "unreviewed", "task": "workspace-users-table"}])
+
 
 if __name__ == "__main__":
     unittest.main()

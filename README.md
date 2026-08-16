@@ -48,7 +48,7 @@ The month is kept so the window stays checkable and so the record visibly accrue
 
 ### Review annotations, stated plainly
 
-**24 of 710 rows carry a per-run review annotation — 3.4% annotation coverage.**
+**24 of 717 rows carry a per-run review annotation — 3.3% annotation coverage.**
 
 Read that as what it is. It measures how often this field was filled in, not how often a review
 happened. A blank field cannot prove a review took place and cannot prove one did not. High-stakes

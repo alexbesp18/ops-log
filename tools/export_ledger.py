@@ -58,6 +58,23 @@ def _pattern(term: str) -> re.Pattern[str]:
     return re.compile(escaped, re.IGNORECASE)
 
 
+HOME_FRAGMENT = re.compile(r"(?i)/?\bUsers/?[a-z][a-z0-9._-]*")
+
+
+def scrub_home_paths(text: str) -> str:
+    """Strip home-directory fragments ("/Users/<name>", or the slash-less "Users<name>" that
+    survives shell-label flattening). A machine's account name is not part of the record."""
+    return HOME_FRAGMENT.sub("~", text)
+
+
+def verify_no_home_paths(rows: list[dict[str, Any]]) -> None:
+    """A home-directory fragment in any field aborts the write."""
+    for index, row in enumerate(rows):
+        for key, value in row.items():
+            if HOME_FRAGMENT.search(str(value)):
+                raise GateBroken(f"row {index} field {key!r} carries a home-directory fragment - aborting write")
+
+
 def find_banned(text: str, terms: Iterable[str]) -> list[str]:
     return [term for term in terms if _pattern(term).search(text)]
 
@@ -94,6 +111,8 @@ def sanitize(rows: list[dict[str, Any]], terms: list[str]) -> tuple[list[dict], 
         # Some task labels carry the date they were coined ("northstar-grade-2026-07-20").
         # The label is worth publishing; the date is not, so strip it from the name.
         task = re.sub(r"[-_ ]?\d{4}-\d{2}-\d{2}", "", task).strip("-_ ")
+        task = scrub_home_paths(task)
+        qa = scrub_home_paths(str(row.get("qa", "")))
         if find_banned(task, terms):
             task = REDACTED
             redacted += 1
@@ -106,7 +125,7 @@ def sanitize(rows: list[dict[str, Any]], terms: list[str]) -> tuple[list[dict], 
                 "month": str(row["ts"])[:7],
                 "engine": row["engine"],
                 "outcome": row["outcome"],
-                "qa": row["qa"],
+                "qa": qa,
                 "task": task,
             }
         )
@@ -185,6 +204,7 @@ def main(argv: list[str] | None = None) -> int:
         rows = read_ledger(args.ledger.expanduser())
         clean, redacted = sanitize(rows, terms)
         verify_clean(clean, terms)
+        verify_no_home_paths(clean)
         verify_no_timestamps(clean)
     except GateBroken as exc:
         print(f"EXPORT REFUSED: {exc}", file=sys.stderr)
